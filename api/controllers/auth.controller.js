@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs";
 export const signup = async (request, response, next) => {
     const {username, email, password} = request.body;
     const hashedPassword = bcryptjs.hashSync(password, 10); 
-    const newUser = new User({username, email, password: hashedPassword});
+    const newUser = new User({username: username, email, password: hashedPassword});
     try {
         await newUser.save();
         response.status(201).json({message: "User created successfully"});
