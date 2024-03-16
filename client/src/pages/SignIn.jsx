@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { signInSuccess, signInStart, signInFailure } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,12 +24,15 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      if(data.success === false){
+      // console.log(response)
+      if(response.ok){
+        // console.log(data)
+        dispatch(signInSuccess(data))
+        navigate('/')
+      } else {
+        // console.log(data)
         dispatch(signInFailure(data.message));
-        return;
       }
-      dispatch(signInSuccess(data))
-      navigate('/')
     } catch (error) {
       dispatch(signInFailure(error));
       console.log(error)
