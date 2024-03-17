@@ -30,4 +30,28 @@ export const signin = async (request, response, next) => {
     } catch (err) {
         next(err)
     }
+};
+
+export const google = async (request, response, next) => {
+    try {
+        const user = await User.findOne({email: request.body.email});
+        if(user) {
+            const token = Jwt.sign({id: user._id}, process.env.JWT_SECRET);
+            const {password: hashedPassword, ...rest} = user._doc;
+            const expiryDate = new Date(Date.now() + 3600000);
+            response.cookie('token', token, {httpOnly: true, expires: expiryDate}).status(200).json(rest);
+        }else {
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            const randomNum = Math.floor(Math.random() * 10000).toString();
+            const newUser = new User({username: request.body.name.split(" ").join("").toLowerCase() + randomNum, email: request.body.email, password: hashedPassword, profilePicture: request.body.photo});
+            await newUser.save();
+            const token = Jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
+            const {password: hashedPassword2, ...rest} = newUser._doc;
+            const expiryDate = new Date(Date.now() + 3600000);
+            response.cookie('token', token, {httpOnly: true, expires: expiryDate}).status(200).json(rest);
+        }
+    }catch(error){
+        next(error);
+    }
 }
