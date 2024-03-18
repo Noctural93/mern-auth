@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, '/client/dist')));
 
 app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-})
+});
 
 app.use(express.json());
 
