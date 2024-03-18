@@ -3,7 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase.js';
 import { useDispatch } from "react-redux";
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from "../redux/user/userSlice.js";
+import { 
+  updateUserStart, 
+  updateUserSuccess, 
+  updateUserFailure, 
+  deleteUserStart, 
+  deleteUserSuccess, 
+  deleteUserFailure,
+  signOut 
+} from "../redux/user/userSlice.js";
 
 export default function Profile() {
   const [image, setImage] = useState(undefined);
@@ -91,7 +99,14 @@ export default function Profile() {
     }
   }
 
-  const handleSignOut = async () => { }
+  const handleSignOut = async () => {
+    try {
+      await fetch('api/auth/sign-out');
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
