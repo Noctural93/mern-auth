@@ -10,16 +10,21 @@ export default function Header() {
             <h1 className='font-bold'>Auth App</h1>
             </Link>
             <ul className='flex gap-4'>
-                <Link to='/'><li>Home</li></Link>
-                <Link to='/about'><li>About</li></Link>
-                <Link to='/sign-in'>{
+                <li><Link to='/'>Home</Link></li>
+                <li><Link to='/about'>About</Link></li>
+                <li>
+                {
                   currentUser ? (
-                    <img src={currentUser.profilePicture} alt='profile' className="h-7 w-7 rounded-full object-cover"/>
+                    <Link to='/profile'>
+                      <img src={currentUser.profilePicture} alt='profile' className="h-7 w-7 rounded-full object-cover"/>
+                      </Link>
                   ) : (
-                    <li>Sign In</li>
+                    <Link to='/sign-in'>
+                      <p>Sign In</p>
+                    </Link>
                   )
                 }
-                </Link>
+                </li>
             </ul>
         </div>
     </div>
